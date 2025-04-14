@@ -9,14 +9,14 @@ from livekit.plugins import (
     #noise_cancellation,
     silero,
 )
-from livekit.plugins.turn_detector.multilingual import MultilingualModel
+#from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 load_dotenv()
 
 
 class Assistant(Agent):
     def __init__(self) -> None:
-        super().__init__(instructions="You are a helpful voice AI assistant.")
+        super().__init__(instructions="You are a voice AI assistant who will conduct interview.")
 
 
 async def entrypoint(ctx: agents.JobContext):
@@ -27,7 +27,7 @@ async def entrypoint(ctx: agents.JobContext):
         llm=openai.LLM(model="gpt-4o-mini"),
         tts=cartesia.TTS(),
         vad=silero.VAD.load(),
-        turn_detection=MultilingualModel(),
+        #turn_detection=MultilingualModel(),
     )
 
     await session.start(
@@ -39,7 +39,7 @@ async def entrypoint(ctx: agents.JobContext):
     )
 
     await session.generate_reply(
-        instructions="Greet the user and offer your assistance."
+        instructions="Greet the user and start taking technical interview from the user based on Javascript."
     )
 
 
