@@ -3,7 +3,7 @@ services:
   repo: https://github.com/asadnaqvii/livekit-agent-deployment
 
   # Change this to the path containing your Dockerfile
-  rootDir: python-agent-example-app
+  rootDir: .
 
   name: agent-example
   runtime: image
