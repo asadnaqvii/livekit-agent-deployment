@@ -3,7 +3,7 @@ services:
   repo: https://github.com/asadnaqvii/livekit-agent-deployment
 
   # Change this to the path containing your Dockerfile
-  rootDir: .
+  rootDir: python-agent-example-app
 
   name: agent-example
   runtime: image
@@ -27,6 +27,3 @@ services:
     targetCPUPercent: 60
     targetMemoryPercent: 60
 version: "1"
-
-
-

@@ -16,7 +16,7 @@ load_dotenv()
 
 class Assistant(Agent):
     def __init__(self) -> None:
-        super().__init__(instructions="You are a voice AI assistant who will conduct interview.")
+        super().__init__(instructions="You are a helpful voice AI assistant.")
 
 
 async def entrypoint(ctx: agents.JobContext):
@@ -39,7 +39,7 @@ async def entrypoint(ctx: agents.JobContext):
     )
 
     await session.generate_reply(
-        instructions="Greet the user and start taking technical interview from the user based on Javascript."
+        instructions="Greet the user and offer your assistance."
     )
 
 
