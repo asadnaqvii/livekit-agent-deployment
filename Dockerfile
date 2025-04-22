@@ -31,4 +31,4 @@ RUN python main.py download-files
 EXPOSE 10000
 
 # Launch your agent
-CMD ["python", "main.py"]
+CMD ["python", "main.py start"]
