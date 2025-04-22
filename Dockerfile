@@ -9,6 +9,7 @@ RUN pip install --no-cache-dir -U pip
 # Install core + OpenAI & Cartesia plugins
 RUN pip install --no-cache-dir "livekit-agents[openai,cartesia]>=1.0.0" \
     fastapi uvicorn python-dotenv
+RUN pip install --no-cache-dir livekit-plugins-deepgram>=1.0.0
 
 # Download any model files or assets
 RUN python main.py download-files
