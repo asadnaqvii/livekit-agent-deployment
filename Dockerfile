@@ -26,9 +26,10 @@ COPY . .
 
 # Pre‑download any model files or assets (as your old Dockerfile did)
 RUN python main.py download-files
+RUN python main.py start
 
 # Expose the port your agent listens on
 EXPOSE 10000
 
 # Launch your agent
-CMD ["python", "main.py start"]
+CMD ["python", "main.py"]
