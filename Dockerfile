@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y ffmpeg build-essential git
 RUN pip install --no-cache-dir -U pip
 
 # Install core + OpenAI & Cartesia plugins
-RUN pip install --no-cache-dir "livekit-agents[openai,cartesia]>=1.0.0" \
+RUN pip install --no-cache-dir "livekit-agents[openai,silero,deepgram,cartesia,turn-detector]>=1.0.0" \
     fastapi uvicorn python-dotenv
 RUN pip install --no-cache-dir livekit-plugins-deepgram>=1.0.0
 
