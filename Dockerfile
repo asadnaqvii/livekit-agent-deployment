@@ -9,7 +9,7 @@ RUN apt-get update \
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip \
  && pip install --no-cache-dir -r requirements.txt livekit-plugins-deepgram>=1.0.0 \
- && pip install --no-cache-dir requests
+ && pip install --no-cache-dir requests \
  && pip install --no-cache-dir torch
 
 COPY . .
