@@ -6,6 +6,9 @@ from livekit import agents
 from livekit.agents import AgentSession, Agent, RoomInputOptions
 from livekit.plugins import openai, cartesia, deepgram, silero
 
+from livekit.plugins.turn_detector.multilingual import MultilingualModel
+from livekit.plugins.noise_cancellation import BVC
+
 # Load environment variables (e.g. NEXTJS_API_URL)
 load_dotenv()
 
@@ -17,7 +20,7 @@ def parse_prompt_payload(ctx: agents.JobContext) -> dict[str, any]:
       2. Job input CLI --input or ctx.job_input (full JSON)
 
     If only a topic is provided, fetch the full catalogue from the web-app
-    and select the matching entry.
+    and select the matching entry. 
 
     The final JSON must contain:
       { "instructions": "...", "hard_skills": ["...", ...] }
@@ -77,17 +80,25 @@ async def entrypoint(ctx: agents.JobContext):
     await ctx.connect()
 
     # 2. Load prompt (instructions + skills)
-    prompt = parse_prompt_payload(ctx)
-    instructions = prompt["instructions"]
-    hard_skills = prompt.get("hard_skills", [])
-    interviewer = build_interviewer(instructions)
+    prompt            = parse_prompt_payload(ctx)
+    base_instructions = prompt["instructions"]
+    hard_skills       = prompt.get("hard_skills", [])
 
-    # 3. Start voice session
+    # 2a. Build the interviewer with embedded hard_skills
+    full_instructions = (
+        base_instructions.strip()
+        + "\n\nPlease ask one question at a time covering each of the following skills:\n"
+        + "\n".join(f"- {skill}" for skill in hard_skills)
+    )
+    interviewer = build_interviewer(full_instructions)
+
+    # 3. Start voice session…
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="multi"),
-        llm=openai.LLM(model="gpt-4o-mini"),
+        llm=openai.LLM(model="gpt-4.1-nano"),
         tts=cartesia.TTS(),
         vad=silero.VAD.load(),
+        turn_detection=MultilingualModel(),
     )
 
     # 4. Collect transcripts
@@ -121,7 +132,7 @@ async def entrypoint(ctx: agents.JobContext):
     await session.start(
         room=ctx.room,
         agent=interviewer(),
-        room_input_options=RoomInputOptions(),
+        room_input_options=RoomInputOptions(noise_cancellation=BVC(),),
     )
 
     # 7. First question
